@@ -1,5 +1,5 @@
 class AuthController {
-  async login (ctx, next) {
+  async login(ctx, next) {
     const { name } = ctx.request.body
     ctx.body = `${name} login success!`
   }
