@@ -14,6 +14,10 @@ const errorType = {
   password_is_wrong: {
     status: 400,
     message: 'Password Was Wrong!'
+  },
+  unauthorized: {
+    status: 401, // Unauthorized
+    message: 'unauthorized'
   }
 }
 

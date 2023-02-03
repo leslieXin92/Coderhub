@@ -1,5 +1,7 @@
+const jwt = require('jsonwebtoken')
 const userService = require('@/service/userService')
 const encrypt = require('@/utils/encrypt')
+const { PUBLIC_KEY } = require('@/app/config')
 
 const verifyLogin = async (ctx, next) => {
   const { name, password } = ctx.request.body
@@ -20,9 +22,27 @@ const verifyLogin = async (ctx, next) => {
     const err = new Error('password_is_wrong')
     return ctx.app.emit('error', err, ctx)
   }
+  ctx.user = user
   await next()
 }
 
+const verifyAuth = async (ctx, next) => {
+  // 获取token
+  const authorization = ctx.headers.authorization
+  const token = authorization.replace('Bearer ', '')
+  // 验证token
+  try {
+    ctx.user = jwt.verify(token, PUBLIC_KEY, {
+      algorithm: ['RS384']
+    })
+    await next()
+  } catch (e) {
+    const err = new Error('unauthorized')
+    ctx.app.emit('error', err, ctx)
+  }
+}
+
 module.exports = {
-  verifyLogin
+  verifyLogin,
+  verifyAuth
 }
