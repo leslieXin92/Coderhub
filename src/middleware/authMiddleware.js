@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const userService = require('@/service/userService')
+const authService = require('@/service/authService')
 const encrypt = require('@/utils/encrypt')
 const { PUBLIC_KEY } = require('@/app/config')
 
@@ -47,7 +48,22 @@ const verifyAuth = async (ctx, next) => {
   }
 }
 
+const verifyPermission = async (ctx, next) => {
+  const { momentId } = ctx.params
+  const { id } = ctx.user
+  // 查看是否拥有权限
+  try {
+    const isPermission = await authService.checkMoment(momentId, id)
+    if (!isPermission) throw new Error()
+    await next()
+  } catch (e) {
+    const err = new Error('you_does_not_have_access')
+    return ctx.app.emit('error', err, ctx)
+  }
+}
+
 module.exports = {
   verifyLogin,
-  verifyAuth
+  verifyAuth,
+  verifyPermission
 }

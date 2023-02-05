@@ -18,6 +18,12 @@ class MomentController {
     const { offset, size } = ctx.query
     ctx.body = await momentService.getMomentList(offset, size)
   }
+
+  async update(ctx, next) {
+    const { momentId } = ctx.params
+    const { content } = ctx.request.body
+    ctx.body = 'update success' + momentId + content
+  }
 }
 
 module.exports = new MomentController()
