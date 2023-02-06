@@ -42,7 +42,6 @@ const verifyAuth = async (ctx, next) => {
     })
     await next()
   } catch (e) {
-    console.log(e.message)
     const err = new Error('unauthorized')
     ctx.app.emit('error', err, ctx)
   }
@@ -57,7 +56,7 @@ const verifyPermission = async (ctx, next) => {
     if (!isPermission) throw new Error()
     await next()
   } catch (e) {
-    const err = new Error('you_does_not_have_access')
+    const err = new Error('you_do_not_have_access')
     return ctx.app.emit('error', err, ctx)
   }
 }

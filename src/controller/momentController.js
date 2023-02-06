@@ -1,28 +1,26 @@
 const momentService = require('@/service/momentService')
 
 class MomentController {
-  async create(ctx, next) {
-    // 获取数据
+  async create(ctx) {
     const userId = ctx.user.id
     const { content } = ctx.request.body
-    // 入库返回
     ctx.body = await momentService.create(userId, content)
   }
 
-  async detail(ctx, next) {
+  async detail(ctx) {
     const { momentId } = ctx.params
     ctx.body = await momentService.getMomentById(momentId)
   }
 
-  async list(ctx, next) {
+  async list(ctx) {
     const { offset, size } = ctx.query
     ctx.body = await momentService.getMomentList(offset, size)
   }
 
-  async update(ctx, next) {
+  async update(ctx) {
     const { momentId } = ctx.params
     const { content } = ctx.request.body
-    ctx.body = 'update success' + momentId + content
+    ctx.body = await momentService.update(content, momentId)
   }
 }
 

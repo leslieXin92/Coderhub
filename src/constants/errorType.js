@@ -19,9 +19,9 @@ const errorType = {
     status: 401, // Unauthorized
     message: 'unauthorized!'
   },
-  you_does_not_have_access: {
+  you_do_not_have_access: {
     status: 401,
-    message: 'You Does Not Have Access!'
+    message: 'You Do Not Have Access!'
   }
 }
 
