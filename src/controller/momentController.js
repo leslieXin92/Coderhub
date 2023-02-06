@@ -22,6 +22,11 @@ class MomentController {
     const { content } = ctx.request.body
     ctx.body = await momentService.update(content, momentId)
   }
+
+  async remove(ctx) {
+    const { momentId } = ctx.params
+    ctx.body = await momentService.remove(momentId)
+  }
 }
 
 module.exports = new MomentController()
