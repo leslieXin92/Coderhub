@@ -48,11 +48,13 @@ const verifyAuth = async (ctx, next) => {
 }
 
 const verifyPermission = async (ctx, next) => {
-  const { momentId } = ctx.params
-  const { id } = ctx.user
+  const { id: userId } = ctx.user
+  const [paramsKey] = Object.keys(ctx.params)
+  const tableName = paramsKey.replace('Id', '')
+  const tableId = ctx.params[paramsKey]
   // 查看是否拥有权限
   try {
-    const isPermission = await authService.checkMoment(momentId, id)
+    const isPermission = await authService.checkRights(tableName, tableId, userId)
     if (!isPermission) throw new Error()
     await next()
   } catch (e) {
