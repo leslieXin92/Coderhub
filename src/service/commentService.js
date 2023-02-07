@@ -24,6 +24,22 @@ class CommentService {
     const [res] = await connection.execute(statement, [commentId])
     return res
   }
+
+  async getCommentById(commentId) {
+    const statement = `
+      SELECT
+        id,
+        content,
+        user_id AS userId,
+        comment_id AS commentId,
+        createAt AS createTime,
+        updateAt AS updateTime
+      FROM comment
+      WHERE moment_id = ?;
+    `
+    const [res] = await connection.execute(statement, [commentId])
+    return res
+  }
 }
 
 module.exports = new CommentService()

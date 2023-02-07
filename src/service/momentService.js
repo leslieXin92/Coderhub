@@ -14,9 +14,18 @@ class MomentService {
         moment.content AS content,
         moment.createAt AS createTime,
         moment.updateAt AS updateTime,
-        JSON_OBJECT('id', user.id, 'name', user.name) AS author
+        JSON_OBJECT('id', u.id, 'name', u.name) AS author,
+        JSON_ARRAYAGG(JSON_OBJECT(
+          'id', comment.id,
+          'commentId', comment.comment_id,
+          'createTime', comment.createAt,
+          'updateTime', comment.updateAt,
+          'user', JSON_OBJECT('id', cu.id, 'name', cu.name)
+        )) AS commentList
       FROM moment
-        LEFT JOIN user ON moment.user_id = user.id
+        LEFT JOIN user AS u ON moment.user_id = u.id
+        LEFT JOIN comment ON moment.id = comment.moment_id
+        LEFT JOIN user AS cu ON cu.id = comment.user_id
       WHERE moment.id = ?;
     `
     const [res] = await connection.execute(statement, [momentId])
@@ -30,7 +39,8 @@ class MomentService {
         moment.content AS content,
         moment.createAt AS createTime,
         moment.updateAt AS updateTime,
-        JSON_OBJECT('id', user.id, 'name', user.name) AS author
+        JSON_OBJECT('id', user.id, 'name', user.name) AS author,
+        (SELECT COUNT(*) FROM comment WHERE comment_id = moment_id) AS commentCount
       FROM moment
         LEFT JOIN user ON moment.user_id = user.id
       LIMIT ?, ?;
