@@ -1,4 +1,6 @@
 const momentService = require('@/service/momentService')
+const { PICTURE_PATH } = require('@/constants/filePath')
+const fs = require('fs')
 
 class MomentController {
   async create(ctx) {
@@ -38,6 +40,13 @@ class MomentController {
       }
     }
     ctx.body = 'add label to moment success!'
+  }
+
+  async fileInfo(ctx) {
+    const { filename } = ctx.params
+    const { mimetype } = await momentService.getFileInfoByFilename(filename)
+    ctx.response.set('content-type', mimetype)
+    ctx.body = fs.createReadStream(`${PICTURE_PATH}/${filename}`)
   }
 }
 

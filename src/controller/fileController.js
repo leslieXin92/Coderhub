@@ -8,7 +8,19 @@ class FileController {
     const { filename, mimetype, size } = ctx.req.file
     const avatarUrl = `${APP_HOST}:${APP_PORT}/user/${userId}/avatar`
     await userService.updateAvatarUrlByUserId(userId, avatarUrl)
-    ctx.body = await fileService.savaAvatarInfo(filename, mimetype, size, userId)
+    await fileService.savaAvatarInfo(filename, mimetype, size, userId)
+    ctx.body = 'avatar upload success!'
+  }
+
+  async savaPictureInfo(ctx) {
+    const { id: userId } = ctx.user
+    const { momentId } = ctx.query
+    const files = ctx.req.files
+    for (let file of files) {
+      const { filename, mimetype, size } = file
+      await fileService.savaPictureInfo(filename, mimetype, size, userId, momentId)
+    }
+    ctx.body = 'picture upload success!'
   }
 }
 

@@ -12,6 +12,12 @@ class FileService {
     const [res] = await connection.execute(statement, [userId])
     return res[0]
   }
+
+  async savaPictureInfo(filename, mimetype, size, userId, momentId) {
+    const statement = `INSERT INTO file (filename, mimetype, size, user_id, moment_id) VALUES (?, ?, ?, ?, ?);`
+    const [res] = await connection.execute(statement, [filename, mimetype, size, userId, momentId])
+    return res
+  }
 }
 
 module.exports = new FileService()

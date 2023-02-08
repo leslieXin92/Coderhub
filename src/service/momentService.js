@@ -27,7 +27,10 @@ class MomentService {
           )), NULL)
         FROM comment
           LEFT JOIN user AS cu ON comment.user_id = cu.id
-        WHERE moment.id = comment.moment_id) AS comments
+        WHERE moment.id = comment.moment_id) AS comments,
+        (SELECT JSON_ARRAYAGG(CONCAT('http://localhost:8000/moment/', moment.id, '/', file.filename))
+        FROM file
+        WHERE moment.id = file.moment_id) AS images
       FROM moment
         LEFT JOIN user AS u ON moment.user_id = u.id
         LEFT JOIN moment_label ON moment_label.moment_id = moment.id
@@ -47,7 +50,10 @@ class MomentService {
         moment.createAt AS createTime,
         moment.updateAt AS updateTime,
         JSON_OBJECT('id', user.id, 'name', user.name) AS author,
-        (SELECT COUNT(*) FROM comment WHERE comment_id = moment_id) AS commentCount
+        (SELECT COUNT(*) FROM comment WHERE comment_id = moment_id) AS commentCount,
+        (SELECT JSON_ARRAYAGG(CONCAT('http://localhost:8000/moment/', moment.id, '/', file.filename))
+        FROM file
+        WHERE moment.id = file.moment_id) AS images
       FROM moment
         LEFT JOIN user ON moment.user_id = user.id
       LIMIT ?, ?;
@@ -78,6 +84,12 @@ class MomentService {
     const statement = `INSERT INTO moment_label (moment_id, label_id) VALUES (?, ?);`
     const [res] = await connection.execute(statement, [momentId, labelId])
     return res
+  }
+
+  async getFileInfoByFilename(filename) {
+    const statement = `SELECT * FROM file WHERE filename = ?;`
+    const [res] = await connection.execute(statement, [filename])
+    return res[0]
   }
 }
 
