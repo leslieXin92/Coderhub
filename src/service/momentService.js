@@ -14,7 +14,7 @@ class MomentService {
         moment.content AS content,
         moment.createAt AS createTime,
         moment.updateAt AS updateTime,
-        JSON_OBJECT('id', u.id, 'name', u.name) AS author,
+        JSON_OBJECT('id', u.id, 'name', u.name, 'avatarUrl', u.avatar_url) AS author,
         IF(COUNT(label.id), JSON_ARRAYAGG(JSON_OBJECT('id', label.id, 'name', label.name)), NULL) AS labels,
         (SELECT
           IF(COUNT(comment.id), JSON_ARRAYAGG(JSON_OBJECT(
@@ -23,7 +23,7 @@ class MomentService {
             'content', comment.content,
             'createTime', comment.createAt,
             'updateTime', comment.updateAt,
-            'user', JSON_OBJECT('id', cu.id, 'name', cu.name)
+            'user', JSON_OBJECT('id', cu.id, 'name', cu.name, 'avatarUrl', cu.avatar_url)
           )), NULL)
         FROM comment
           LEFT JOIN user AS cu ON comment.user_id = cu.id

@@ -2,16 +2,16 @@ const commentService = require('@/service/commentService')
 
 class CommentController {
   async create(ctx) {
-    const { id } = ctx.user
+    const { id: userId } = ctx.user
     const { momentId, content } = ctx.request.body
-    ctx.body = await commentService.create(id, momentId, content)
+    ctx.body = await commentService.create(userId, momentId, content)
   }
 
   async reply(ctx) {
-    const { id } = ctx.user
+    const { id:userId } = ctx.user
     const { momentId, content } = ctx.request.body
     const { commentId } = ctx.params
-    ctx.body = await commentService.reply(id, momentId, commentId, content)
+    ctx.body = await commentService.reply(userId, momentId, commentId, content)
   }
 
   async update(ctx) {
