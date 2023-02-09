@@ -15,7 +15,7 @@ class FileController {
   async savaPictureInfo(ctx) {
     const { id: userId } = ctx.user
     const { momentId } = ctx.query
-    const files = ctx.req.files
+    const { files } = ctx.req
     for (let file of files) {
       const { filename, mimetype, size } = file
       await fileService.savaPictureInfo(filename, mimetype, size, userId, momentId)

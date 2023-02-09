@@ -1,10 +1,10 @@
+const fs = require('fs')
 const momentService = require('@/service/momentService')
 const { PICTURE_PATH } = require('@/constants/filePath')
-const fs = require('fs')
 
 class MomentController {
   async create(ctx) {
-    const userId = ctx.user.id
+    const { id: userId } = ctx.user
     const { content } = ctx.request.body
     ctx.body = await momentService.create(userId, content)
   }
@@ -35,9 +35,7 @@ class MomentController {
     const { momentId } = ctx.params
     for (let label of labels) {
       const isExists = await momentService.checkLabelIsExists(momentId, label.id)
-      if (!isExists) {
-        await momentService.addLabel(momentId, label.id)
-      }
+      if (!isExists) await momentService.addLabel(momentId, label.id)
     }
     ctx.body = 'add label to moment success!'
   }

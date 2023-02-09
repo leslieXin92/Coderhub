@@ -1,8 +1,8 @@
 // 动态接口
 const Router = require('koa-router')
 const { verifyAuth, verifyPermission } = require('@/middleware/authMiddleware')
-const { create, list, detail, update, remove, addLabel, fileInfo } = require('@/controller/momentController')
 const { verifyLabel } = require('@/middleware/labelMiddleware')
+const { create, list, detail, update, remove, addLabel, fileInfo } = require('@/controller/momentController')
 
 const momentRouter = new Router({ prefix: '/moment' })
 

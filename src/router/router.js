@@ -1,3 +1,4 @@
+// 动态注册路由
 const fs = require('fs')
 
 const useRoutes = (app) => {

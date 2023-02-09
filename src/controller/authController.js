@@ -11,8 +11,9 @@ class AuthController {
     ctx.body = { id, name, token }
   }
 
-  async loginSuccess(ctx) {
-    ctx.body = 'login success!'
+  async getUser(ctx) {
+    const { name } = ctx.user
+    ctx.body = `${name} is login!`
   }
 }
 

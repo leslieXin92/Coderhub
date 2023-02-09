@@ -9,4 +9,3 @@ userRouter.post('/', verifyUserInfo, encryptPassword, create)
 userRouter.get('/:userId/avatar', getAvatar)
 
 module.exports = userRouter
-
